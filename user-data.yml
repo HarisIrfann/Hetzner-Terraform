@@ -1,0 +1,25 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+packages:
+  - nginx
+  - ufw
+runcmd:
+  - sudo systemctl enable nginx
+  - sudo ufw allow 'Nginx HTTP'
+  - sudo ufw allow 'OpenSSH'
+  - sudo ufw enable
+  - sudo rm /var/www/html/*
+  - sudo tee /var/www/html/index.html > /dev/null << EOF
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Welcome to My Website</title>
+    </head>
+    <body>
+      <h1>Welcome to My Website!</h1>
+      <p>This is a custom HTML page served by Nginx.</p>
+    </body>
+    </html>
+    EOF
+  - sudo systemctl restart nginx
